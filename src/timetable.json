@@ -1,0 +1,40 @@
+{
+    "monday": [
+        {
+            "time_begin": "7:55",
+            "time_end": "8:40",
+            "lesson": "Deutsch",
+            "color": "#EA676A"
+        },
+        {
+            "time_begin": "8:40",
+            "time_end": "9:25",
+            "lesson": "Mathe",
+            "color": "#61A8EC"
+        },
+        {
+            "time_begin": "9:45",
+            "time_end": "10:30",
+            "lesson": "Religion",
+            "color": "#CC38FF"
+        },
+        {
+            "time_begin": "10:30",
+            "time_end": "11:15",
+            "lesson": "Musik",
+            "color": "#A7b1C0"
+        },
+        {
+            "time_begin": "11:25",
+            "time_end": "12:10",
+            "lesson": "Geschichte",
+            "color": "#EA8846"
+        },
+        {
+            "time_begin": "12:10",
+            "time_end": "12:55",
+            "lesson": "Physik",
+            "color": "#F7D555"
+        }
+    ]
+}
