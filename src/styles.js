@@ -24,6 +24,8 @@ export const cardStyles = StyleSheet.create({
     marginLeft: "17.5%",
     textAlign: 'center', // Center-align the title text
     color: "white",
+    fontWeight: "900",
+    fontFamily: "roboto"
 
   },
   content: {
@@ -36,15 +38,14 @@ export const cardStyles = StyleSheet.create({
     left: "4.5%",
     fontSize: 14,
     color: 'white',
-    fontFamily: "ubuntu"
-
+    fontFamily: "roboto",
   },
   time_end: {
+    fontFamily: "roboto",
     position: 'absolute',
     bottom: "50%",
     left: "4.5%",
     fontSize: 14,
     color: 'white',
-    fontFamily: "ubuntu"
   },
 })
