@@ -1,19 +1,19 @@
 {
     "monday": [
         {
-            "time_begin": "7:55",
-            "time_end": "8:40",
+            "time_begin": "07:55",
+            "time_end": "08:40",
             "lesson": "Deutsch",
             "color": "#EA676A"
         },
         {
-            "time_begin": "8:40",
-            "time_end": "9:25",
+            "time_begin": "08:40",
+            "time_end": "09:25",
             "lesson": "Mathe",
             "color": "#61A8EC"
         },
         {
-            "time_begin": "9:45",
+            "time_begin": "09:45",
             "time_end": "10:30",
             "lesson": "Religion",
             "color": "#CC38FF"
@@ -35,6 +35,158 @@
             "time_end": "12:55",
             "lesson": "Physik",
             "color": "#F7D555"
+        }
+    ],
+    "tuesday": [
+        {
+            "time_begin": "07:55",
+            "time_end": "08:40",
+            "lesson": "Englisch",
+            "color": "#5DBCD2"
+        },
+        {
+            "time_begin": "08:40",
+            "time_end": "09:25",
+            "lesson": "Chemie",
+            "color": "#F5A623"
+        },
+        {
+            "time_begin": "09:45",
+            "time_end": "10:30",
+            "lesson": "Biologie",
+            "color": "#8BC34A"
+        },
+        {
+            "time_begin": "10:30",
+            "time_end": "11:15",
+            "lesson": "Kunst",
+            "color": "#FF4081"
+        },
+        {
+            "time_begin": "11:25",
+            "time_end": "12:10",
+            "lesson": "Sport",
+            "color": "#FF7043"
+        },
+        {
+            "time_begin": "12:10",
+            "time_end": "12:55",
+            "lesson": "Informatik",
+            "color": "#9C27B0"
+        }
+    ],
+    "wednesday": [
+        {
+            "time_begin": "07:55",
+            "time_end": "08:40",
+            "lesson": "Physik",
+            "color": "#536DFE"
+        },
+        {
+            "time_begin": "08:40",
+            "time_end": "09:25",
+            "lesson": "Literatur",
+            "color": "#FF4081"
+        },
+        {
+            "time_begin": "09:45",
+            "time_end": "10:30",
+            "lesson": "Geographie",
+            "color": "#4CAF50"
+        },
+        {
+            "time_begin": "10:30",
+            "time_end": "11:15",
+            "lesson": "Spanisch",
+            "color": "#FF5722"
+        },
+        {
+            "time_begin": "11:25",
+            "time_end": "12:10",
+            "lesson": "Chemie",
+            "color": "#F5A623"
+        },
+        {
+            "time_begin": "12:10",
+            "time_end": "12:55",
+            "lesson": "Geschichte",
+            "color": "#FF9800"
+        }
+    ],
+    "thursday": [
+        {
+            "time_begin": "07:55",
+            "time_end": "08:40",
+            "lesson": "Mathe",
+            "color": "#8BC34A"
+        },
+        {
+            "time_begin": "08:40",
+            "time_end": "09:25",
+            "lesson": "Literatur",
+            "color": "#536DFE"
+        },
+        {
+            "time_begin": "09:45",
+            "time_end": "10:30",
+            "lesson": "Biologie",
+            "color": "#FF4081"
+        },
+        {
+            "time_begin": "10:30",
+            "time_end": "11:15",
+            "lesson": "Französisch",
+            "color": "#4CAF50"
+        },
+        {
+            "time_begin": "11:25",
+            "time_end": "12:10",
+            "lesson": "Physik",
+            "color": "#536DFE"
+        },
+        {
+            "time_begin": "12:10",
+            "time_end": "12:55",
+            "lesson": "Informatik",
+            "color": "#9C27B0"
+        }
+    ],
+    "friday": [
+        {
+            "time_begin": "07:55",
+            "time_end": "08:40",
+            "lesson": "Chemie",
+            "color": "#F5A623"
+        },
+        {
+            "time_begin": "08:40",
+            "time_end": "09:25",
+            "lesson": "Geschichte",
+            "color": "#FF9800"
+        },
+        {
+            "time_begin": "09:45",
+            "time_end": "10:30",
+            "lesson": "Mathe",
+            "color": "#8BC34A"
+        },
+        {
+            "time_begin": "10:30",
+            "time_end": "11:15",
+            "lesson": "Kunst",
+            "color": "#FF7043"
+        },
+        {
+            "time_begin": "11:25",
+            "time_end": "12:10",
+            "lesson": "Sport",
+            "color": "#FFCA28"
+        },
+        {
+            "time_begin": "12:10",
+            "time_end": "12:55",
+            "lesson": "Englisch",
+            "color": "#5DBCD2"
         }
     ]
 }

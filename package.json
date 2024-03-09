@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "expo": "~50.0.8",
+    "expo-app-loading": "^2.1.1",
+    "expo-font": "~11.10.3",
+    "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -18,7 +21,9 @@
     "react-native-reanimated": "~3.6.2",
     "react-native-screens": "~3.29.0",
     "react-native-swipe-gestures": "^1.0.5",
-    "react-native-web": "~0.19.6"
+    "react-native-swiper": "^1.6.0",
+    "react-native-web": "~0.19.6",
+    "react-swipeable": "^7.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

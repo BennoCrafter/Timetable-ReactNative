@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const cardStyles = StyleSheet.create({
   card: {
-    padding: 20,
+    padding: 22,
     margin: 2,
     borderRadius: 10,
     shadowColor: '#000',
@@ -16,13 +16,15 @@ export const cardStyles = StyleSheet.create({
     alignItems: 'flex-start', // Align items to the start (left) of the container
     position: 'relative', // Set position to relative for absolute positioning of time text
     width: "90%",
+
   },
   lesson: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 50,
+    marginLeft: "17.5%",
     textAlign: 'center', // Center-align the title text
     color: "white",
+
   },
   content: {
     fontSize: 16,
@@ -30,16 +32,19 @@ export const cardStyles = StyleSheet.create({
   },
   time_begin: {
     position: 'absolute',
-    top: 13,
-    left: 13,
-    fontSize: 15,
+    top: "50%",
+    left: "4.5%",
+    fontSize: 14,
     color: 'white',
+    fontFamily: "ubuntu"
+
   },
   time_end: {
     position: 'absolute',
-    bottom: 13,
-    left: 13,
-    fontSize: 15,
+    bottom: "50%",
+    left: "4.5%",
+    fontSize: 14,
     color: 'white',
+    fontFamily: "ubuntu"
   },
-});
+})
