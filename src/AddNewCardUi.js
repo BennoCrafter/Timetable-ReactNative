@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
 
-const SecondView = ({ onClose }) => {
+const AddNewCardUi = ({ onClose }) => {
   return (
     <View style={styles.container}>
       <Text>Coming soon!</Text>
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    color: "#F2F3F5"
+    backgroundColor: "#E2E5DE"
   }
 })
-export default SecondView;
+export default AddNewCardUi;

@@ -5,7 +5,7 @@ import * as timetableData from "./timetable.json";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import Swiper from "react-native-swiper";
-import AddNewCard from "./AddNewCard";
+import AddNewCardButton from "./AddNewCardButton";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,7 +42,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <AddNewCard></AddNewCard>
+      <AddNewCardButton></AddNewCardButton>
       <Swiper style={styles.swiperContainer} loop={true} loopJump={false}>
         {days.map((str, idx) => (
           <View key={str + idx} style={styles.slide}>
