@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,16 +6,16 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
-} from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { addNewLessonToTimetable } from "./AddNewCardBackend";
+} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {addNewLessonToTimetable} from '../../utils/AddNewCardBackend';
 
-const AddNewCardUi = ({ onClose }) => {
+const AddNewCardUi = ({onClose}) => {
   const [lessonModalVisible, setLessonModalVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState("Select lesson");
-  const [selectedDay, setSelectedDay] = useState("Select day");
-  const [selectedColor, setSelectedColor] = useState("Select color");
+  const [selectedLesson, setSelectedLesson] = useState('Select lesson');
+  const [selectedDay, setSelectedDay] = useState('Select day');
+  const [selectedColor, setSelectedColor] = useState('Select color');
   const [timeBegin, setTimeBegin] = useState();
   const [timeEnd, setTimeEnd] = useState();
   const [colorModalVisible, setColorModalVisible] = useState(false);
@@ -62,9 +62,19 @@ const AddNewCardUi = ({ onClose }) => {
 
   const handleButtonClickNewCard = () => {
     // Call the function from another file with one attribute
-    const timeEndStripped = new Date(timeEnd).getHours() + ":" + new Date(timeEnd).getMinutes()
-    const timeBeginStripped = new Date(timeBegin).getHours() + ":" + new Date(timeBegin).getMinutes()
-    addNewLessonToTimetable({day: selectedDay.toLowerCase(), lessonData: {color: selectedColor.toLowerCase(), lesson: selectedLesson, time_begin: timeBeginStripped, time_end: timeEndStripped}});
+    const timeEndStripped =
+      new Date(timeEnd).getHours() + ':' + new Date(timeEnd).getMinutes();
+    const timeBeginStripped =
+      new Date(timeBegin).getHours() + ':' + new Date(timeBegin).getMinutes();
+    addNewLessonToTimetable({
+      day: selectedDay.toLowerCase(),
+      lessonData: {
+        color: selectedColor.toLowerCase(),
+        lesson: selectedLesson,
+        time_begin: timeBeginStripped,
+        time_end: timeEndStripped,
+      },
+    });
   };
 
   const onChangeBegin = (event, selectedDate) => {
@@ -77,9 +87,9 @@ const AddNewCardUi = ({ onClose }) => {
     setTimeEnd(currentDate);
   };
 
-  const lessonOptions = ["Deutsch", "Mathe", "Englisch"];
-  const dayOptions = ["Monday", "Tuesday", "wednesday", "Thursday", "Friday"];
-  const colorOptions = ["Red", "Blue", "Green", "Yellow", "Purple"];
+  const lessonOptions = ['Deutsch', 'Mathe', 'Englisch'];
+  const dayOptions = ['Monday', 'Tuesday', 'wednesday', 'Thursday', 'Friday'];
+  const colorOptions = ['Red', 'Blue', 'Green', 'Yellow', 'Purple'];
 
   return (
     <View style={styles.container}>
@@ -96,7 +106,7 @@ const AddNewCardUi = ({ onClose }) => {
         <Text style={styles.lessonText}>{selectedDay}</Text>
       </TouchableOpacity>
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={lessonModalVisible}
         onRequestClose={closeLessonModal}
@@ -113,12 +123,12 @@ const AddNewCardUi = ({ onClose }) => {
                 <Text>{lesson}</Text>
               </TouchableOpacity>
             ))}
-            <Button title="Close" onPress={closeLessonModal} />
+            <Button title='Close' onPress={closeLessonModal} />
           </View>
         </View>
       </Modal>
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={dayModalVisible}
         onRequestClose={closeDayModal}
@@ -135,7 +145,7 @@ const AddNewCardUi = ({ onClose }) => {
                 <Text>{day}</Text>
               </TouchableOpacity>
             ))}
-            <Button title="Close" onPress={closeDayModal} />
+            <Button title='Close' onPress={closeDayModal} />
           </View>
         </View>
       </Modal>
@@ -143,7 +153,7 @@ const AddNewCardUi = ({ onClose }) => {
         <Text style={styles.lessonText}>{selectedColor}</Text>
       </TouchableOpacity>
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={colorModalVisible}
         onRequestClose={closeColorModal}
@@ -160,16 +170,16 @@ const AddNewCardUi = ({ onClose }) => {
                 <Text>{color}</Text>
               </TouchableOpacity>
             ))}
-            <Button title="Close" onPress={closeColorModal} />
+            <Button title='Close' onPress={closeColorModal} />
           </View>
         </View>
       </Modal>
       <View style={styles.timeContainer}>
         <Text style={styles.label}>Time begin:</Text>
         <DateTimePicker
-          testID="dateTimePicker"
+          testID='dateTimePicker'
           value={timeBegin || new Date()}
-          mode={"time"}
+          mode={'time'}
           is24Hour={true}
           onChange={onChangeBegin}
           style={styles.dateTimePicker}
@@ -178,15 +188,15 @@ const AddNewCardUi = ({ onClose }) => {
       <View style={styles.timeContainer}>
         <Text style={styles.label}>Time end:</Text>
         <DateTimePicker
-          testID="dateTimePicker"
+          testID='dateTimePicker'
           value={timeEnd || new Date()}
-          mode={"time"}
+          mode={'time'}
           is24Hour={true}
           onChange={onChangeEnd}
           style={styles.dateTimePicker}
         />
       </View>
-      <Button title="Close" onPress={onClose} />
+      <Button title='Close' onPress={onClose} />
     </View>
   );
 };
@@ -194,67 +204,67 @@ const AddNewCardUi = ({ onClose }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#E2E5DE",
+    alignItems: 'center',
+    backgroundColor: '#E2E5DE',
   },
   input: {
-    marginTop: "12%",
+    marginTop: '12%',
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 10,
-    width: "90%",
-    alignItems: "center",
-    justifyContent: "center",
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   lessonText: {
-    fontFamily: "roboto",
+    fontFamily: 'roboto',
     fontSize: 20,
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
-    alignItems: "stretch",
-    width: "80%", // Adjust the width of the modal content
+    alignItems: 'stretch',
+    width: '80%', // Adjust the width of the modal content
   },
   modalHeader: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   item: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    fontFamily: "roboto",
+    borderBottomColor: '#ccc',
+    fontFamily: 'roboto',
   },
   dateTimePicker: {},
   label: {
-    marginRight: "3%",
-    fontFamily: "roboto",
+    marginRight: '3%',
+    fontFamily: 'roboto',
     fontSize: 18,
   },
   timeContainer: {
-    marginTop: "10%",
-    flexDirection: "row",
-    alignItems: "center",
+    marginTop: '10%',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   button: {
-    marginLeft: "80%",
-    paddingTop: "14%",
+    marginLeft: '80%',
+    paddingTop: '14%',
   },
   buttonText: {
-    color: "black",
+    color: 'black',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 
