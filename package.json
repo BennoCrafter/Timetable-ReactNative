@@ -9,11 +9,18 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.22.3",
+    "@react-native-community/datetimepicker": "^7.6.2",
+    "@react-native-picker/picker": "^2.6.1",
     "expo": "~50.0.8",
     "expo-app-loading": "^2.1.1",
+    "expo-file-system": "^16.0.8",
+    "expo-file-system-view": "^0.1.7",
     "expo-font": "~11.10.3",
     "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
+    "expo-updates": "^0.24.11",
+    "fs": "^0.0.1-security",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.4",
@@ -23,7 +30,10 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.19.6",
-    "react-swipeable": "^7.0.1"
+    "react-redux": "^9.1.0",
+    "react-swipeable": "^7.0.1",
+    "redux": "^5.0.1",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

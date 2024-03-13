@@ -19,7 +19,7 @@ export const cardStyles = StyleSheet.create({
 
   },
   lesson: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginLeft: "17.5%",
     textAlign: 'center', // Center-align the title text
