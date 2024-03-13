@@ -62,9 +62,17 @@ export default function App() {
     return null;
   }
 
+  const addCard = (newCard) => {
+    const { day, lessonData } = newCard;
+
+    // Add the new lesson data to the appropriate day's timetable
+    timetableData[day] = timetableData[day] || []; // Ensure the day exists in the timetable
+    timetableData[day].push(lessonData); // Add the new lesson data
+    console.log("ADDED LOCAL DATA")
+  };
   return (
     <View style={styles.container}>
-      <AddNewCardButton />
+      <AddNewCardButton onCardAdd={addCard}/>
       <Provider store={store}>
         <Swiper
           style={styles.swiperContainer}

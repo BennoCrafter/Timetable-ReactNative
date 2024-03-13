@@ -5,16 +5,19 @@ import {View, StyleSheet, Modal, TouchableOpacity, Text} from 'react-native';
 import SecondView from '../NewCard/AddNewCardUi';
 import AddNewCardUi from '../NewCard/AddNewCardUi';
 
-const AddNewCardButton = () => {
+const AddNewCardButton = ({onCardAdd}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
     setModalVisible(true);
+
   };
   const closeModal = () => {
     setModalVisible(false);
   };
-
+  const addCard = (d) => {
+    onCardAdd(d)
+  }
   return (
     <View>
       <Modal
@@ -23,7 +26,7 @@ const AddNewCardButton = () => {
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-        <AddNewCardUi onClose={closeModal} />
+        <AddNewCardUi onClose={closeModal} onCardAdd={addCard}/>
       </Modal>
       <View>
         <TouchableOpacity style={styles.button} onPress={openModal}>

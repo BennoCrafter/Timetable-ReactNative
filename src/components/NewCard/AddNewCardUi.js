@@ -10,7 +10,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {addNewLessonToTimetable} from '../../utils/AddNewCardBackend';
 
-const AddNewCardUi = ({onClose}) => {
+const AddNewCardUi = ({onClose , onCardAdd}) => {
   const [lessonModalVisible, setLessonModalVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState('Select lesson');
@@ -75,6 +75,15 @@ const AddNewCardUi = ({onClose}) => {
         time_end: timeEndStripped,
       },
     });
+    onCardAdd({
+      day: selectedDay.toLowerCase(),
+      lessonData: {
+        color: selectedColor.toLowerCase(),
+        lesson: selectedLesson,
+        time_begin: timeBeginStripped,
+        time_end: timeEndStripped,
+      },
+    })
   };
 
   const onChangeBegin = (event, selectedDate) => {
