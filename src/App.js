@@ -64,12 +64,17 @@ export default function App() {
 
   const addCard = (newCard) => {
     const { day, lessonData } = newCard;
-
+  
     // Add the new lesson data to the appropriate day's timetable
-    timetableData[day] = timetableData[day] || []; // Ensure the day exists in the timetable
-    timetableData[day].push(lessonData); // Add the new lesson data
-    console.log("ADDED LOCAL DATA")
+    const updatedTimetableData = {
+      ...timetableData,
+      [day]: [...(timetableData[day] || []), lessonData],
+    };
+  
+    // Now we update the state with the new data
+    setTimetableData(updatedTimetableData);
   };
+  
   return (
     <View style={styles.container}>
       <AddNewCardButton onCardAdd={addCard}/>

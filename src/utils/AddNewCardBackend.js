@@ -21,7 +21,6 @@ export const addNewLessonToTimetable = async (newLesson, dispatch) => {
 
         // Save the updated timetable data back to AsyncStorage
         await AsyncStorage.setItem('timetable', updatedTimetableString);
-
         console.log('New lesson added to timetable successfully!');
     } catch (error) {
         console.error('Error adding new lesson to timetable:', error);
