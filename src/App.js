@@ -84,7 +84,7 @@ export default function App() {
   
     // Now we update the state with the new data
     setTimetableData(updatedTimetableData);
-    setDays(Object.keys(timetableData))
+    setDays(Object.keys(updatedTimetableData))
   };
   
   return (
