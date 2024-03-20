@@ -7,9 +7,9 @@ import Swiper from 'react-native-swiper';
 import AddNewCardButton from './components/Button/AddNewCardButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as devConfig from "../assets/dev-config.json"
-import { fontColor } from './styles/fontStyle';
 import { isDarkMode } from './styles/fontStyle';
 import { darkModeStyle } from './styles/fontStyle';
+import { convertUnicodeToEmojis } from './utils/functions/convertUnicodeToEmojis';
 SplashScreen.preventAutoHideAsync();
 
 const date_translation = {
@@ -22,7 +22,6 @@ const date_translation = {
   sunday: 'Sonntag',
 };
 
-const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -31,7 +30,7 @@ export default function App() {
   });
 
   const [timetableData, setTimetableData] = useState();
-
+  const [days, setDays] = useState([])
   const deleteData = async () => {
     try{
       await AsyncStorage.clear()
@@ -42,9 +41,11 @@ export default function App() {
   const loadData = async () => {
     try {
       let storedData = await AsyncStorage.getItem('timetable');
-      setTimetableData(JSON.parse(storedData) || {});
+      let parsedData = JSON.parse(storedData);
+      setTimetableData(parsedData || {});
+      setDays(parsedData !== null ? Object.keys(parsedData) : []);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error ldoading data:', error);
     }
   };
 
@@ -83,6 +84,7 @@ export default function App() {
   
     // Now we update the state with the new data
     setTimetableData(updatedTimetableData);
+    setDays(Object.keys(timetableData))
   };
   
   return (
@@ -94,12 +96,12 @@ export default function App() {
           loopJump={false}
           onIndexChanged={(idx) => (currentIndex = idx)}
         >
-          {days.map((str, idx) => (
-            <View key={str + idx} style={styles.slide}>
+          {days.map((day, idx) => (
+            <View key={day + idx} style={styles.slide}>
               <Text key={idx} style={[styles.title,  isDarkMode ? darkModeStyle.fontColor : {}]}>
-                {date_translation[str]}{' '}
+                {convertUnicodeToEmojis(day)}
               </Text>
-              {renderCards(str, timetableData)}
+              {renderCards(day, timetableData)}
             </View>
           ))}
         </Swiper>

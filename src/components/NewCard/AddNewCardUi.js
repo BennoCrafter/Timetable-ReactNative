@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Button, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addNewLessonToTimetable } from "../../utils/AddNewCardBackend";
-import { prettifyTime } from "../../utils/prettifyTime";
+import { prettifyTime } from "../../utils/functions/prettifyTime";
 import LessonModal from "../Modals/LessonModal";
 import DayModal from "../Modals/DayModal";
 import ColorModal from "../Modals/ColorModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { modalStyles } from "../../styles/modalStyles";
 import { darkModeStyle, isDarkMode } from "../../styles/fontStyle";
+import { convertEmojisToUnicode } from "../../utils/functions/convertEmojisToUnicode";
 
 const AddNewCardUi = ({ onClose, onCardAdd }) => {
   const [lessonModalVisible, setLessonModalVisible] = useState(false);
@@ -88,10 +89,10 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
 
   const handleNewCard = () => {
     const data = {
-      day: selectedDay.toLowerCase(),
+      day: convertEmojisToUnicode(selectedDay),
       lessonData: {
         color: selectedColor,
-        lesson: selectedLesson,
+        lesson: convertEmojisToUnicode(selectedLesson),
         time_begin: prettifyTime(timeBegin),
         time_end: prettifyTime(timeEnd),
       },
