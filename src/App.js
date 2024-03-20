@@ -6,9 +6,10 @@ import {useFonts} from 'expo-font';
 import Swiper from 'react-native-swiper';
 import AddNewCardButton from './components/Button/AddNewCardButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Provider} from 'react-redux';
-import store from './utils/store';
-
+import * as devConfig from "../assets/dev-config.json"
+import { fontColor } from './styles/fontStyle';
+import { isDarkMode } from './styles/fontStyle';
+import { darkModeStyle } from './styles/fontStyle';
 SplashScreen.preventAutoHideAsync();
 
 const date_translation = {
@@ -31,21 +32,30 @@ export default function App() {
 
   const [timetableData, setTimetableData] = useState();
 
+  const deleteData = async () => {
+    try{
+      await AsyncStorage.clear()
+    }catch{
+      console.error("Error deleting database")
+    }
+  }
   const loadData = async () => {
     try {
       let storedData = await AsyncStorage.getItem('timetable');
-      setTimetableData(JSON.parse(storedData));
+      setTimetableData(JSON.parse(storedData) || {});
     } catch (error) {
       console.error('Error loading data:', error);
     }
   };
 
   useEffect(() => {
+    if(devConfig["dataClear"]){
+      deleteData()
+    }
     loadData();
   }, []);
 
   useEffect(() => {
-    console.log(timetableData, 'sd');
   }, [timetableData]);
 
   const onLayoutRootView = useCallback(async () => {
@@ -76,9 +86,8 @@ export default function App() {
   };
   
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDarkMode ? darkModeStyle.backgroundTheme : {}]}>
       <AddNewCardButton onCardAdd={addCard}/>
-      <Provider store={store}>
         <Swiper
           style={styles.swiperContainer}
           loop={true}
@@ -87,14 +96,13 @@ export default function App() {
         >
           {days.map((str, idx) => (
             <View key={str + idx} style={styles.slide}>
-              <Text key={idx} style={styles.title}>
+              <Text key={idx} style={[styles.title,  isDarkMode ? darkModeStyle.fontColor : {}]}>
                 {date_translation[str]}{' '}
               </Text>
               {renderCards(str, timetableData)}
             </View>
           ))}
         </Swiper>
-      </Provider>
     </View>
   );
 }
@@ -115,7 +123,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    color: '#333',
     marginBottom: 20,
     fontFamily: 'roboto',
   },

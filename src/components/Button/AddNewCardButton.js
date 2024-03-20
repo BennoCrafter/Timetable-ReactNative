@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Modal, TouchableOpacity, Text} from 'react-native';
-
+import { isDarkMode, darkModeStyle } from '../../styles/fontStyle';
 // Import your SecondView component here
-import SecondView from '../NewCard/AddNewCardUi';
 import AddNewCardUi from '../NewCard/AddNewCardUi';
 
 const AddNewCardButton = ({onCardAdd}) => {
@@ -16,6 +15,7 @@ const AddNewCardButton = ({onCardAdd}) => {
     setModalVisible(false);
   };
   const addCard = (d) => {
+    console.log(d)
     onCardAdd(d)
   }
   return (
@@ -30,7 +30,7 @@ const AddNewCardButton = ({onCardAdd}) => {
       </Modal>
       <View>
         <TouchableOpacity style={styles.button} onPress={openModal}>
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={[styles.buttonText, isDarkMode? darkModeStyle.fontColor: {}]}>+</Text>
         </TouchableOpacity>
       </View>
     </View>

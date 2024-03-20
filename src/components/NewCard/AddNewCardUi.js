@@ -1,24 +1,51 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {addNewLessonToTimetable} from '../../utils/AddNewCardBackend';
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Button, StyleSheet } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { addNewLessonToTimetable } from "../../utils/AddNewCardBackend";
+import { prettifyTime } from "../../utils/prettifyTime";
+import LessonModal from "../Modals/LessonModal";
+import DayModal from "../Modals/DayModal";
+import ColorModal from "../Modals/ColorModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { modalStyles } from "../../styles/modalStyles";
+import { darkModeStyle, isDarkMode } from "../../styles/fontStyle";
 
-const AddNewCardUi = ({onClose , onCardAdd}) => {
+const AddNewCardUi = ({ onClose, onCardAdd }) => {
   const [lessonModalVisible, setLessonModalVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState('Select lesson');
-  const [selectedDay, setSelectedDay] = useState('Select day');
-  const [selectedColor, setSelectedColor] = useState('Select color');
-  const [timeBegin, setTimeBegin] = useState();
-  const [timeEnd, setTimeEnd] = useState();
+  const [selectedLesson, setSelectedLesson] = useState("Select lesson");
+  const [selectedDay, setSelectedDay] = useState("Select day");
+  const [selectedColor, setSelectedColor] = useState("Select color");
+  const [timeBegin, setTimeBegin] = useState(new Date());
+  const [timeEnd, setTimeEnd] = useState(new Date());
   const [colorModalVisible, setColorModalVisible] = useState(false);
+  const [lessonOptions, setLessonOptions] = useState([
+    "Deutsch",
+    "Mathe",
+    "Englisch",
+  ]);
+  const [dayOptions, setDayOptions] = useState([]);
+  const [colorOptions, setColorOptions] = useState(["#61A8EC"]);
+
+  let storedData;
+  const loadData = async () => {
+    try {
+      storedData = await AsyncStorage.getItem("lessonOptions");
+      setLessonOptions(JSON.parse(storedData) || []);
+
+      storedData = await AsyncStorage.getItem("colorOptions");
+      setColorOptions(JSON.parse(storedData) || []);
+
+      storedData = await AsyncStorage.getItem("dayOptions");
+      setDayOptions(JSON.parse(storedData) || []);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const openLessonModal = () => {
     setLessonModalVisible(true);
@@ -52,7 +79,6 @@ const AddNewCardUi = ({onClose , onCardAdd}) => {
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
     setLessonModalVisible(false);
-    // Open the day modal only if a lesson is selected and the day modal is closed
   };
 
   const handleDaySelect = (day) => {
@@ -60,30 +86,20 @@ const AddNewCardUi = ({onClose , onCardAdd}) => {
     setDayModalVisible(false);
   };
 
-  const handleButtonClickNewCard = () => {
-    // Call the function from another file with one attribute
-    const timeEndStripped =
-      new Date(timeEnd).getHours() + ':' + new Date(timeEnd).getMinutes();
-    const timeBeginStripped =
-      new Date(timeBegin).getHours() + ':' + new Date(timeBegin).getMinutes();
-    addNewLessonToTimetable({
+  const handleNewCard = () => {
+    const data = {
       day: selectedDay.toLowerCase(),
       lessonData: {
-        color: selectedColor.toLowerCase(),
+        color: selectedColor,
         lesson: selectedLesson,
-        time_begin: timeBeginStripped,
-        time_end: timeEndStripped,
+        time_begin: prettifyTime(timeBegin),
+        time_end: prettifyTime(timeEnd),
       },
-    });
-    onCardAdd({
-      day: selectedDay.toLowerCase(),
-      lessonData: {
-        color: selectedColor.toLowerCase(),
-        lesson: selectedLesson,
-        time_begin: timeBeginStripped,
-        time_end: timeEndStripped,
-      },
-    })
+    };
+
+    addNewLessonToTimetable(data);
+    onCardAdd(data);
+    onClose();
   };
 
   const onChangeBegin = (event, selectedDate) => {
@@ -95,186 +111,106 @@ const AddNewCardUi = ({onClose , onCardAdd}) => {
     const currentDate = selectedDate || timeEnd;
     setTimeEnd(currentDate);
   };
-
-  const lessonOptions = ['Deutsch', 'Mathe', 'Englisch'];
-  const dayOptions = ['Monday', 'Tuesday', 'wednesday', 'Thursday', 'Friday'];
-  const colorOptions = ['Red', 'Blue', 'Green', 'Yellow', 'Purple'];
-
+  // todo: make clea
+  const handleNewOptions = async (options, storageKey) => {
+    try {
+      switch (storageKey) {
+        case "lessonOptions":
+          setLessonOptions(options);
+          break;
+        case "colorOptions":
+          setColorOptions(options);
+          break;
+        case "dayOptions":
+          setDayOptions(options);
+          break;
+        default:
+          break;
+      }
+      await AsyncStorage.setItem(storageKey, JSON.stringify(options));
+      console.log(`${storageKey} saved successfully!`);
+    } catch (error) {
+      console.error(`Error saving ${storageKey}:`, error);
+    }
+  };
+  
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleButtonClickNewCard}
-      >
-        <Text style={styles.buttonText}>Add</Text>
+    <View style={[modalStyles.modalContent, isDarkMode ? darkModeStyle.backgroundTheme : {}]}>
+        <View style={modalStyles.buttonContainer}>
+          <TouchableOpacity onPress={onClose} style={modalStyles.button3}>
+            <Text style={[modalStyles.buttonText, isDarkMode ? darkModeStyle.fontColor : {}]}>Close</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleNewCard()}
+            style={modalStyles.button2}
+          >
+            <Text style={[modalStyles.buttonText, isDarkMode ? darkModeStyle.fontColor : {}]}>Add</Text>
+          </TouchableOpacity>
+        </View>
+
+      <TouchableOpacity onPress={openLessonModal} style={modalStyles.input}>
+        <Text style={modalStyles.lessonText}>{selectedLesson}</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={openLessonModal} style={styles.input}>
-        <Text style={styles.lessonText}>{selectedLesson}</Text>
+
+      <TouchableOpacity onPress={openDayModal} style={modalStyles.input}>
+        <Text style={modalStyles.lessonText}>{selectedDay}</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={openDayModal} style={styles.input}>
-        <Text style={styles.lessonText}>{selectedDay}</Text>
+
+      <TouchableOpacity onPress={openColorModal} style={modalStyles.input}>
+        <Text style={modalStyles.lessonText}>{selectedColor}</Text>
       </TouchableOpacity>
-      <Modal
-        animationType='slide'
-        transparent={true}
+
+      <LessonModal
         visible={lessonModalVisible}
-        onRequestClose={closeLessonModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Select a lesson</Text>
-            {lessonOptions.map((lesson, index) => (
-              <TouchableOpacity
-                onPress={() => handleLessonSelect(lesson)}
-                style={styles.item}
-                key={index}
-              >
-                <Text>{lesson}</Text>
-              </TouchableOpacity>
-            ))}
-            <Button title='Close' onPress={closeLessonModal} />
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType='slide'
-        transparent={true}
+        onClose={closeLessonModal}
+        onSelectLesson={handleLessonSelect}
+        lessonOptions={lessonOptions}
+        onNewLessonOptions={handleNewOptions}
+      />
+
+      <DayModal
         visible={dayModalVisible}
-        onRequestClose={closeDayModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Select a day</Text>
-            {dayOptions.map((day, index) => (
-              <TouchableOpacity
-                onPress={() => handleDaySelect(day)}
-                style={styles.item}
-                key={index}
-              >
-                <Text>{day}</Text>
-              </TouchableOpacity>
-            ))}
-            <Button title='Close' onPress={closeDayModal} />
-          </View>
-        </View>
-      </Modal>
-      <TouchableOpacity onPress={openColorModal} style={styles.input}>
-        <Text style={styles.lessonText}>{selectedColor}</Text>
-      </TouchableOpacity>
-      <Modal
-        animationType='slide'
-        transparent={true}
+        onClose={closeDayModal}
+        onSelectDay={handleDaySelect}
+        dayOptions={dayOptions}
+        onNewDayOptions={handleNewOptions}
+      />
+
+      <ColorModal
         visible={colorModalVisible}
-        onRequestClose={closeColorModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Select a color</Text>
-            {colorOptions.map((color, index) => (
-              <TouchableOpacity
-                onPress={() => handleColorSelect(color)}
-                style={styles.item}
-                key={index}
-              >
-                <Text>{color}</Text>
-              </TouchableOpacity>
-            ))}
-            <Button title='Close' onPress={closeColorModal} />
-          </View>
-        </View>
-      </Modal>
-      <View style={styles.timeContainer}>
-        <Text style={styles.label}>Time begin:</Text>
+        onClose={closeColorModal}
+        onSelectColor={handleColorSelect}
+        colorOptions={colorOptions}
+        onNewColorOptions={handleNewOptions}
+      />
+
+      <View style={modalStyles.timeContainer}>
+        <Text style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}>Time begin:</Text>
         <DateTimePicker
-          testID='dateTimePicker'
+          testID="dateTimePicker"
           value={timeBegin || new Date()}
-          mode={'time'}
+          mode={"time"}
           is24Hour={true}
           onChange={onChangeBegin}
-          style={styles.dateTimePicker}
+          style={[modalStyles.dateTimePicker]}
+          themeVariant={isDarkMode ? "dark" : "light"}
         />
       </View>
-      <View style={styles.timeContainer}>
-        <Text style={styles.label}>Time end:</Text>
+
+      <View style={modalStyles.timeContainer}>
+        <Text style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}>Time end:</Text>
         <DateTimePicker
-          testID='dateTimePicker'
+          testID="dateTimePicker"
           value={timeEnd || new Date()}
-          mode={'time'}
+          mode={"time"}
           is24Hour={true}
           onChange={onChangeEnd}
-          style={styles.dateTimePicker}
+          style={modalStyles.dateTimePicker}
+          themeVariant={isDarkMode ? "dark" : "light"}
         />
       </View>
-      <Button title='Close' onPress={onClose} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#E2E5DE',
-  },
-  input: {
-    marginTop: '12%',
-    padding: 10,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    width: '90%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  lessonText: {
-    fontFamily: 'roboto',
-    fontSize: 20,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'stretch',
-    width: '80%', // Adjust the width of the modal content
-  },
-  modalHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  item: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    fontFamily: 'roboto',
-  },
-  dateTimePicker: {},
-  label: {
-    marginRight: '3%',
-    fontFamily: 'roboto',
-    fontSize: 18,
-  },
-  timeContainer: {
-    marginTop: '10%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  button: {
-    marginLeft: '80%',
-    paddingTop: '14%',
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
 
 export default AddNewCardUi;

@@ -1,6 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch } from 'react-redux'; // Importing useDispatch from react-redux
-import * as Updates from 'expo-updates';
 
 // Inside your component function
 export const addNewLessonToTimetable = async (newLesson, dispatch) => {
