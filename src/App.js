@@ -43,9 +43,9 @@ export default function App() {
       let storedData = await AsyncStorage.getItem('timetable');
       let parsedData = JSON.parse(storedData);
       setTimetableData(parsedData || {});
-      setDays(parsedData !== null ? Object.keys(parsedData) : []);
+      setDays(JSON.parse(await (AsyncStorage.getItem("dayOptions"))));
     } catch (error) {
-      console.error('Error ldoading data:', error);
+      console.error('Error loading data:', error);
     }
   };
 
@@ -73,7 +73,7 @@ export default function App() {
     return null;
   }
 
-  const addCard = (newCard) => {
+   const addCard = async (newCard) => {
     const { day, lessonData } = newCard;
   
     // Add the new lesson data to the appropriate day's timetable
@@ -84,7 +84,7 @@ export default function App() {
   
     // Now we update the state with the new data
     setTimetableData(updatedTimetableData);
-    setDays(Object.keys(updatedTimetableData))
+    setDays(JSON.parse(await (AsyncStorage.getItem("dayOptions"))))
   };
   
   return (
