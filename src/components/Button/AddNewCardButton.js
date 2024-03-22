@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Modal, TouchableOpacity, Text} from 'react-native';
 import { isDarkMode, darkModeStyle } from '../../styles/fontStyle';
 // Import your SecondView component here
-import AddNewCardUi from '../NewCard/AddNewCardUi';
+import CardCreationUi from '../NewCard/CardCreationUi';
 
 const AddNewCardButton = ({onCardAdd}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,7 +26,7 @@ const AddNewCardButton = ({onCardAdd}) => {
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-        <AddNewCardUi onClose={closeModal} onCardAdd={addCard}/>
+        <CardCreationUi onClose={closeModal} onCardAdd={addCard} mode={"New Card"} defaultInputText={null}/>
       </Modal>
       <View>
         <TouchableOpacity style={styles.button} onPress={openModal}>

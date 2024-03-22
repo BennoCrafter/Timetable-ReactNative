@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { modalStyles } from "../../styles/modalStyles";
 import { isDarkMode, darkModeStyle } from "../../styles/fontStyle";
+import { convertEmojisToUnicode } from "../../utils/functions/convertEmojisToUnicode";
+import { convertUnicodeToEmojis } from "../../utils/functions/convertUnicodeToEmojis";
+import { GestureHandlerRootView, NativeViewGestureHandler, ScrollView } from "react-native-gesture-handler";
 
 const LessonModal = ({
   visible,
@@ -19,7 +22,7 @@ const LessonModal = ({
   onNewLessonOptions,
 }) => {
   const addNewLesson = (lessonName) => {
-    onNewLessonOptions([...lessonOptions, lessonName], "lessonOptions");
+    onNewLessonOptions([...lessonOptions, convertEmojisToUnicode(lessonName)], "lessonOptions");
   };
   return (
     <Modal
@@ -53,19 +56,28 @@ const LessonModal = ({
             </TouchableOpacity>
           </View>
           <Text style={[modalStyles.modalHeader, isDarkMode ? darkModeStyle.fontColor: []]}>Select a lesson</Text>
+          <GestureHandlerRootView>
+          <ScrollView style={styles.scrollViewContainer}>
           {lessonOptions.map((lesson, index) => (
             <TouchableOpacity
               onPress={() => onSelectLesson(lesson)}
               style={[modalStyles.item, isDarkMode ? darkModeStyle.fontColor: []]}
               key={index}
             >
-              <Text style={isDarkMode ? darkModeStyle.fontColor : []}>{lesson}</Text>
+              <Text style={isDarkMode ? darkModeStyle.fontColor : []}>{convertUnicodeToEmojis(lesson)}</Text>
             </TouchableOpacity>
           ))}
+          </ScrollView>
+          </GestureHandlerRootView>
         </View>
       </View>
     </Modal>
   );
 };
 
+const styles = StyleSheet.create({
+  scrollViewContainer: {
+    maxHeight: "85%",
+  }
+})
 export default LessonModal;

@@ -10,23 +10,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { modalStyles } from "../../styles/modalStyles";
 import { darkModeStyle, isDarkMode } from "../../styles/fontStyle";
 import { convertEmojisToUnicode } from "../../utils/functions/convertEmojisToUnicode";
+import { formatTime } from "../../utils/functions/formatTime";
 
-const AddNewCardUi = ({ onClose, onCardAdd }) => {
+const CardCreationUi = ({ onClose, onCardAdd, mode, defaultInputText }) => {
   const [lessonModalVisible, setLessonModalVisible] = useState(false);
   const [dayModalVisible, setDayModalVisible] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState("Select lesson");
-  const [selectedDay, setSelectedDay] = useState("Select day");
-  const [selectedColor, setSelectedColor] = useState("Select color");
-  const [timeBegin, setTimeBegin] = useState(new Date());
-  const [timeEnd, setTimeEnd] = useState(new Date());
+  const [selectedLesson, setSelectedLesson] = useState(defaultInputText != null ? defaultInputText["lesson"]:"Select lesson");
+  const [selectedDay, setSelectedDay] = useState(defaultInputText != null ? defaultInputText["day"]:"Select day");
+  const [selectedColor, setSelectedColor] = useState(defaultInputText != null ? defaultInputText["color"]: "Select color");
+  const [timeBegin, setTimeBegin] = useState(defaultInputText != null ? new Date(formatTime(defaultInputText["timeBegin"])) : new Date());
+  const [timeEnd, setTimeEnd] = useState(defaultInputText != null ? new Date(formatTime(defaultInputText["timeEnd"])): new Date());
   const [colorModalVisible, setColorModalVisible] = useState(false);
-  const [lessonOptions, setLessonOptions] = useState([
-    "Deutsch",
-    "Mathe",
-    "Englisch",
-  ]);
+  const [lessonOptions, setLessonOptions] = useState([]);
   const [dayOptions, setDayOptions] = useState([]);
-  const [colorOptions, setColorOptions] = useState(["#61A8EC"]);
+  const [colorOptions, setColorOptions] = useState([]);
 
   let storedData;
   const loadData = async () => {
@@ -89,17 +86,18 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
 
   const handleNewCard = () => {
     const data = {
-      day: convertEmojisToUnicode(selectedDay),
+      day: selectedDay,
       lessonData: {
         color: selectedColor,
-        lesson: convertEmojisToUnicode(selectedLesson),
-        time_begin: prettifyTime(timeBegin),
-        time_end: prettifyTime(timeEnd),
+        lesson: selectedLesson,
+        timeBegin: prettifyTime(timeBegin),
+        timeEnd: prettifyTime(timeEnd),
       },
     };
-
-    addNewLessonToTimetable(data);
     onCardAdd(data);
+    if (mode === "New Card") {
+      addNewLessonToTimetable(data);
+    }
     onClose();
   };
 
@@ -112,7 +110,6 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
     const currentDate = selectedDate || timeEnd;
     setTimeEnd(currentDate);
   };
-  // todo: make clea
   const handleNewOptions = async (options, storageKey) => {
     try {
       switch (storageKey) {
@@ -134,27 +131,51 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
       console.error(`Error saving ${storageKey}:`, error);
     }
   };
-  
-  return (
-    <View style={[modalStyles.modalContent, isDarkMode ? darkModeStyle.backgroundTheme : {}]}>
-        <View style={modalStyles.buttonContainer}>
-          <TouchableOpacity onPress={onClose} style={modalStyles.button3}>
-            <Text style={[modalStyles.buttonText, isDarkMode ? darkModeStyle.fontColor : {}]}>Close</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleNewCard()}
-            style={modalStyles.button2}
-          >
-            <Text style={[modalStyles.buttonText, isDarkMode ? darkModeStyle.fontColor : {}]}>Add</Text>
-          </TouchableOpacity>
-        </View>
 
-      <TouchableOpacity onPress={openLessonModal} style={modalStyles.input}>
-        <Text style={modalStyles.lessonText}>{selectedLesson}</Text>
-      </TouchableOpacity>
+  return (
+    <View
+      style={[
+        modalStyles.modalContent,
+        isDarkMode ? darkModeStyle.backgroundTheme : {},
+      ]}
+    >
+      <View style={modalStyles.buttonContainer}>
+        <TouchableOpacity onPress={onClose} style={modalStyles.button3}>
+          <Text
+            style={[
+              modalStyles.buttonText,
+              isDarkMode ? darkModeStyle.fontColor : {},
+            ]}
+          >
+            Close
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleNewCard()}
+          style={modalStyles.button2}
+        >
+          <Text
+            style={[
+              modalStyles.buttonText,
+              isDarkMode ? darkModeStyle.fontColor : {},
+            ]}
+          >
+            Add
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <Text
+        style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}
+      >
+        {mode}
+      </Text>
 
       <TouchableOpacity onPress={openDayModal} style={modalStyles.input}>
         <Text style={modalStyles.lessonText}>{selectedDay}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={openLessonModal} style={modalStyles.input}>
+        <Text style={modalStyles.lessonText}>{selectedLesson}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={openColorModal} style={modalStyles.input}>
@@ -186,7 +207,11 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
       />
 
       <View style={modalStyles.timeContainer}>
-        <Text style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}>Time begin:</Text>
+        <Text
+          style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}
+        >
+          Time begin:
+        </Text>
         <DateTimePicker
           testID="dateTimePicker"
           value={timeBegin || new Date()}
@@ -199,7 +224,11 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
       </View>
 
       <View style={modalStyles.timeContainer}>
-        <Text style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}>Time end:</Text>
+        <Text
+          style={[modalStyles.label, isDarkMode ? darkModeStyle.fontColor : {}]}
+        >
+          Time end:
+        </Text>
         <DateTimePicker
           testID="dateTimePicker"
           value={timeEnd || new Date()}
@@ -214,4 +243,4 @@ const AddNewCardUi = ({ onClose, onCardAdd }) => {
   );
 };
 
-export default AddNewCardUi;
+export default CardCreationUi;

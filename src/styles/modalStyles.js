@@ -47,7 +47,8 @@ export const modalStyles = StyleSheet.create({
     fontFamily: "roboto",
     flexDirection: "row",
   },
-  dateTimePicker: {},
+  dateTimePicker: {
+  },
   label: {
     marginRight: "3%",
     fontFamily: "roboto",

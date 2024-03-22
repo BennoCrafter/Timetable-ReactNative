@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { sortTimetableDay } from "./functions/sortTimetableDay";
 
 // Inside your component function
 export const addNewLessonToTimetable = async (newLesson, dispatch) => {
@@ -13,7 +14,9 @@ export const addNewLessonToTimetable = async (newLesson, dispatch) => {
         // Add the new lesson data to the appropriate day's timetable
         existingTimetable[day] = existingTimetable[day] || []; // Ensure the day exists in the timetable
         existingTimetable[day].push(lessonData); // Add the new lesson data
-
+        console.log(sortTimetableDay(existingTimetable[day]))
+        existingTimetable[day] = sortTimetableDay(existingTimetable[day])
+        
         // Stringify the updated timetable data
         const updatedTimetableString = JSON.stringify(existingTimetable);
 

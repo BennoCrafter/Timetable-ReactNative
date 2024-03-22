@@ -15,7 +15,7 @@ export const cardStyles = StyleSheet.create({
     elevation: 5,
     alignItems: 'flex-start', // Align items to the start (left) of the container
     position: 'relative', // Set position to relative for absolute positioning of time text
-    width: "90%",
+    width: "100%",
 
   },
   lesson: {
@@ -32,7 +32,7 @@ export const cardStyles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center', // Center-align the content text
   },
-  time_begin: {
+  timeBegin: {
     position: 'absolute',
     top: "50%",
     left: "4.5%",
@@ -40,7 +40,7 @@ export const cardStyles = StyleSheet.create({
     color: 'white',
     fontFamily: "roboto",
   },
-  time_end: {
+  timeEnd: {
     fontFamily: "roboto",
     position: 'absolute',
     bottom: "50%",

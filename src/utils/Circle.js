@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 
 const Circle = ({ color, size }) => {
-  console.log(color)
   return (
     <View
       style={{

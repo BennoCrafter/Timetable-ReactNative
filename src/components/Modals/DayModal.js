@@ -3,9 +3,13 @@ import { View, Text, Modal, TouchableOpacity, Button } from "react-native";
 import { modalStyles } from "../../styles/modalStyles";
 import { isDarkMode, darkModeStyle } from "../../styles/fontStyle";
 import { Alert } from "react-native";
+import { convertEmojisToUnicode } from "../../utils/functions/convertEmojisToUnicode";
+import { convertUnicodeToEmojis } from "../../utils/functions/convertUnicodeToEmojis";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+
 const DayModal = ({ visible, onClose, onSelectDay, dayOptions, onNewDayOptions }) => {
   const addNewDay = (dayName) => {
-    onNewDayOptions([...dayOptions, dayName], "dayOptions");
+    onNewDayOptions([...dayOptions, convertEmojisToUnicode(dayName)], "dayOptions");
   };
   
   return (
@@ -75,7 +79,7 @@ const DayModal = ({ visible, onClose, onSelectDay, dayOptions, onNewDayOptions }
               ]}
               key={index}
             >
-              <Text style={isDarkMode ? darkModeStyle.fontColor : []}>{day}</Text>
+              <Text style={isDarkMode ? darkModeStyle.fontColor : []}>{convertUnicodeToEmojis(day)}</Text>
             </TouchableOpacity>
           ))}
         </View>
