@@ -7,12 +7,9 @@ export const editCard = async (
   newData
 ) => {
   const { day, lessonData } = newData;
-  clickedCardData["lesson"] = lessonData["lesson"];
-  clickedCardData["color"] = lessonData["color"];
-  clickedCardData["timeBegin"] = lessonData["timeBegin"];
-  clickedCardData["timeEnd"] = lessonData["timeEnd"];
 
-  currentTimetableData[day][clickedCardData["index"]] = clickedCardData;
+  currentTimetableData[day][clickedCardData["index"]] = lessonData;
+  // sorting if times changed
   currentTimetableData[day] = sortTimetableDay(currentTimetableData[day]);
   await AsyncStorage.setItem("timetable", JSON.stringify(currentTimetableData));
   return currentTimetableData;

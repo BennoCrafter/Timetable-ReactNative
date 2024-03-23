@@ -30,7 +30,7 @@ export default function App() {
   const deleteData = async () => {
     try {
       await AsyncStorage.clear();
-      await AsyncStorage.setItem("colorOptions", '["#63C8BA","#5BBC73","#9B61E2","#EA676A","#4366CF","#61A8EC","#9A742A","#A7B1C0","#CB7CE0","#9AC8EB"]')
+      await AsyncStorage.setItem("colorOptions", '["#63C8BA","#5BBC73","#9B61E2","#EA676A","#4366CF","#61A8EC","#9A742A","#A7B1C0","#CB7CE0","#9AC8EB", "#F09A57"]')
     } catch {
       console.error("Error deleting database");
     }
