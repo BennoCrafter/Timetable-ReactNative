@@ -10,16 +10,18 @@ import * as devConfig from "../assets/dev-config.json";
 import { isDarkMode } from "./styles/fontStyle";
 import { darkModeStyle } from "./styles/fontStyle";
 import { convertUnicodeToEmojis } from "./utils/functions/convertUnicodeToEmojis";
-import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import EditCardModal from "./components/Modals/EditCardModal";
 import { sortTimetableDay } from "./utils/functions/sortTimetableDay";
-
+import defaultData from "../assets/defaultData.json";
 SplashScreen.preventAutoHideAsync();
-
 
 export default function App() {
   const [editCardModalVisible, seteditCardModalVisible] = useState(false);
-  const [clickedCardData, setClickedCardData] = useState()
+  const [clickedCardData, setClickedCardData] = useState();
   const [fontsLoaded, fontError] = useFonts({
     ubuntu: require("../assets/Ubuntu-B.ttf"),
     roboto: require("../assets/Roboto-Bold.ttf"),
@@ -30,7 +32,9 @@ export default function App() {
   const deleteData = async () => {
     try {
       await AsyncStorage.clear();
-      await AsyncStorage.setItem("colorOptions", '["#63C8BA","#5BBC73","#9B61E2","#EA676A","#4366CF","#61A8EC","#9A742A","#A7B1C0","#CB7CE0","#9AC8EB", "#F09A57"]')
+      for (let item in defaultData) {
+        await AsyncStorage.setItem(item, JSON.stringify(defaultData[item]))
+      }
     } catch {
       console.error("Error deleting database");
     }
@@ -51,13 +55,15 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (devConfig["dataClear"]) {
-      deleteData();
-    }
-    loadData();
-  }, []);
+    const fetchData = async () => {
+      if (devConfig["dataClear"]) {
+        await deleteData();
+      }
+      await loadData();
+    };
 
-  useEffect(() => {}, [timetableData]);
+    fetchData();
+  }, []);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded || fontError) {
@@ -72,7 +78,7 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
-
+  
   const addCard = async (newCard) => {
     const { day, lessonData } = newCard;
 
@@ -89,10 +95,20 @@ export default function App() {
 
   const renderCards = (day, timetableData) => {
     return timetableData && timetableData[day]
-      ? timetableData[day].map((card, index) => <TouchableOpacity key={index+"touch"} onPress={() => {setClickedCardData({...card , day, index});seteditCardModalVisible(true)}}><Card key={index} {...card} /></TouchableOpacity>)
+      ? timetableData[day].map((card, index) => (
+          <TouchableOpacity
+            key={index + "touch"}
+            onPress={() => {
+              setClickedCardData({ ...card, day, index });
+              seteditCardModalVisible(true);
+            }}
+          >
+            <Card key={index} {...card} />
+          </TouchableOpacity>
+        ))
       : null;
   };
-  
+
   return (
     <View
       style={[
@@ -101,7 +117,13 @@ export default function App() {
       ]}
     >
       <AddNewCardButton onCardAdd={addCard} />
-      <EditCardModal visible={editCardModalVisible} onClose={() => seteditCardModalVisible(false)} clickedCardData={clickedCardData} onUpdatedData={setTimetableData} currentTimetableData={timetableData}/>
+      <EditCardModal
+        visible={editCardModalVisible}
+        onClose={() => seteditCardModalVisible(false)}
+        clickedCardData={clickedCardData}
+        onUpdatedData={setTimetableData}
+        currentTimetableData={timetableData}
+      />
       <Swiper
         style={styles.swiperContainer}
         loop={true}
@@ -116,8 +138,8 @@ export default function App() {
             >
               {convertUnicodeToEmojis(day)}
             </Text>
-            <GestureHandlerRootView key={idx+"ghrv"} style={styles.ghrv}>
-            {renderCards(day, timetableData)}
+            <GestureHandlerRootView key={idx + "ghrv"} style={styles.ghrv}>
+              {renderCards(day, timetableData)}
             </GestureHandlerRootView>
           </View>
         ))}
@@ -132,7 +154,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   slide: {
-    alignItems: "center", 
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
@@ -142,5 +164,5 @@ const styles = StyleSheet.create({
   swiperContainer: {},
   ghrv: {
     width: "90%",
-  }
+  },
 });
