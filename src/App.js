@@ -1,65 +1,39 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import Card from "./components/Card/Card";
-import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
 import Swiper from "react-native-swiper";
-import AddNewCardButton from "./components/Button/AddNewCardButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
 import * as devConfig from "../assets/dev-config.json";
 import { isDarkMode } from "./styles/fontStyle";
 import { darkModeStyle } from "./styles/fontStyle";
 import { convertUnicodeToEmojis } from "./utils/functions/convertUnicodeToEmojis";
-import {
-  GestureHandlerRootView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AddNewCardButton from "./components/Button/AddNewCardButton";
 import EditCardModal from "./components/Modals/EditCardModal";
 import { sortTimetableDay } from "./utils/functions/sortTimetableDay";
-import defaultData from "../assets/defaultData.json";
+import RenderCards from "./components/RenderCards";
+import { useFonts } from "expo-font";
+
+import { initializeState, deleteData, loadData } from "./state/state";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [editCardModalVisible, seteditCardModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [clickedCardData, setClickedCardData] = useState();
   const [fontsLoaded, fontError] = useFonts({
     ubuntu: require("../assets/Ubuntu-B.ttf"),
     roboto: require("../assets/Roboto-Bold.ttf"),
   });
-
   const [timetableData, setTimetableData] = useState();
   const [days, setDays] = useState([]);
-  const deleteData = async () => {
-    try {
-      await AsyncStorage.clear();
-      for (let item in defaultData) {
-        await AsyncStorage.setItem(item, JSON.stringify(defaultData[item]))
-      }
-    } catch {
-      console.error("Error deleting database");
-    }
-  };
-  const loadData = async () => {
-    try {
-      let storedData = await AsyncStorage.getItem("timetable");
-      let parsedData = JSON.parse(storedData);
-      setTimetableData(parsedData || {});
-      setDays(
-        parsedData !== null
-          ? JSON.parse(await AsyncStorage.getItem("dayOptions"))
-          : []
-      );
-    } catch (error) {
-      console.error("Error loading data:", error);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       if (devConfig["dataClear"]) {
         await deleteData();
       }
-      await loadData();
+      await loadData(setTimetableData, setDays);
     };
 
     fetchData();
@@ -78,68 +52,40 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
-  
-  const addCard = async (newCard) => {
-    const { day, lessonData } = newCard;
 
-    // Add the new lesson data to the appropriate day's timetable
+  const addCard = async (newCard, updatedDayOptions) => {
+    const { day, lessonData } = newCard;
     const updatedTimetableData = {
       ...timetableData,
       [day]: sortTimetableDay([...(timetableData[day] || []), lessonData]),
     };
-
-    // Now we update the state with the new data
     setTimetableData(updatedTimetableData);
-    setDays(JSON.parse(await AsyncStorage.getItem("dayOptions")));
-  };
-
-  const renderCards = (day, timetableData) => {
-    return timetableData && timetableData[day]
-      ? timetableData[day].map((card, index) => (
-          <TouchableOpacity
-            key={index + "touch"}
-            onPress={() => {
-              setClickedCardData({ ...card, day, index });
-              seteditCardModalVisible(true);
-            }}
-          >
-            <Card key={index} {...card} />
-          </TouchableOpacity>
-        ))
-      : null;
+    setDays(updatedDayOptions);
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        isDarkMode ? darkModeStyle.backgroundTheme : {},
-      ]}
-    >
+    <View style={[styles.container, isDarkMode ? darkModeStyle.backgroundTheme : {}]}>
       <AddNewCardButton onCardAdd={addCard} />
       <EditCardModal
-        visible={editCardModalVisible}
-        onClose={() => seteditCardModalVisible(false)}
+        visible={editModalVisible}
+        onClose={() => setEditModalVisible(false)}
         clickedCardData={clickedCardData}
         onUpdatedData={setTimetableData}
         currentTimetableData={timetableData}
       />
-      <Swiper
-        style={styles.swiperContainer}
-        loop={true}
-        loopJump={false}
-        onIndexChanged={(idx) => (currentIndex = idx)}
-      >
+      <Swiper style={styles.swiperContainer} loop loopJump={false}>
         {days.map((day, idx) => (
           <View key={day + idx} style={styles.slide}>
-            <Text
-              key={idx}
-              style={[styles.title, isDarkMode ? darkModeStyle.fontColor : {}]}
-            >
+            <Text style={[styles.title, isDarkMode ? darkModeStyle.fontColor : {}]}>
               {convertUnicodeToEmojis(day)}
             </Text>
-            <GestureHandlerRootView key={idx + "ghrv"} style={styles.ghrv}>
-              {renderCards(day, timetableData)}
+            <GestureHandlerRootView style={styles.ghrv}>
+              <RenderCards
+                day={day}
+                timetableData={timetableData}
+                setEditModalVisible={setEditModalVisible}
+                setClickedCardData={setClickedCardData}
+              />
             </GestureHandlerRootView>
           </View>
         ))}

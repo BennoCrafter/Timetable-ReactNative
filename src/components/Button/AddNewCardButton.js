@@ -14,9 +14,8 @@ const AddNewCardButton = ({onCardAdd}) => {
   const closeModal = () => {
     setModalVisible(false);
   };
-  const addCard = (d) => {
-    console.log(d)
-    onCardAdd(d)
+  const addCard = (d,n) => {
+    onCardAdd(d,n)
   }
   return (
     <View>

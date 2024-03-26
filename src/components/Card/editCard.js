@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sortTimetableDay } from "../../utils/functions/sortTimetableDay";
+import { UpdateData } from "../../utils/UpdateData";
 
 export const editCard = async (
   clickedCardData,
@@ -11,6 +11,6 @@ export const editCard = async (
   currentTimetableData[day][clickedCardData["index"]] = lessonData;
   // sorting if times changed
   currentTimetableData[day] = sortTimetableDay(currentTimetableData[day]);
-  await AsyncStorage.setItem("timetable", JSON.stringify(currentTimetableData));
+  await UpdateData("timetable", currentTimetableData)
   return currentTimetableData;
 };

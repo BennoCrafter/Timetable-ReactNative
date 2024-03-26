@@ -94,7 +94,7 @@ const CardCreationUi = ({ onClose, onCardAdd, mode, defaultInputText }) => {
         timeEnd: prettifyTime(timeEnd),
       },
     };
-    onCardAdd(data);
+    onCardAdd(data, dayOptions);
     if (mode === "New Card") {
       addNewLessonToTimetable(data);
     }
