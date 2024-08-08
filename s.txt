@@ -1,8 +1,0 @@
-      <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalNewColorVisible}
-          onRequestClose={closeModalNewColor}
-        >
-          <AddNewColorUi onClose={closeModalNewColor} />
-        </Modal>
